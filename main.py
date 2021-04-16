@@ -17,7 +17,7 @@ def operation(args, name):
                 print('{}ion failed, your data is intact'.format(name))
             except:
                 print('{}ion failed, your data is corrupted'.format(name))
-                raise
+            raise
 
 def command_line_args():
     parser = argparse.ArgumentParser(description='Tutorial')
@@ -36,8 +36,12 @@ def command_line_args():
     args.cipher = ciphers.cipher_class[args.cipher]
     return args
 
-args = command_line_args()
-if args.encrypt:
-    operation(args, 'encrypt')
-if args.decrypt:
-    operation(args, 'decrypt')
+
+try:
+    args = command_line_args()
+    if args.encrypt:
+        operation(args, 'encrypt')
+    if args.decrypt:
+        operation(args, 'decrypt')
+except Exception as exception:
+    print(exception)
