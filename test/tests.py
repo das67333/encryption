@@ -1,6 +1,8 @@
-import ciphers
 import random
+import sys
 import unittest
+sys.path.append('..')
+from src import ciphers
 
 class Tests(unittest.TestCase):
     def check_ciphers(self, data, key):

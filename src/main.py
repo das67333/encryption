@@ -36,7 +36,6 @@ def command_line_args():
     args.cipher = ciphers.cipher_class[args.cipher]
     return args
 
-
 try:
     args = command_line_args()
     if args.encrypt:
