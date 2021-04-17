@@ -1,0 +1,7 @@
+*.exe
+*.pyproj
+*.sln
+*.txt
+tkinter.py
+**/__pycache__/
+**/.vs/
