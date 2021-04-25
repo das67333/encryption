@@ -10,7 +10,7 @@ import os.path
 __title__ = 'Encryption'
 window = Tk()
 window.title(__title__)
-window.geometry('320x180')
+window.geometry('280x150')
 
 class Args:
     file = None
@@ -109,9 +109,8 @@ def draw_ui(window):
     progress_label.pack(side=LEFT)
 
     for frame in frames:
-        frame.pack(fill=X)
+        frame.pack(fill=X, padx=10, pady=4)
 
 draw_ui(window)
 
 window.mainloop()
-
