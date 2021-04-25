@@ -7,4 +7,4 @@ Run textUI.py with arguments below to encrypt/decrypt the file:
   -e, --encrypt         encrypt the file  
   -d, --decrypt         decrypt the file  
   
-or run graphUI.py  
+or run graphUI.pyw  
