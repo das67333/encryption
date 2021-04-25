@@ -1,4 +1,4 @@
-Run textUI.py with arguments below to encrypt/decrypt the file:  
+Run src/textUI.py with arguments below to encrypt/decrypt the file:  
   -h, --help            show this help message and exit  
   -f FILE, --file FILE  path to the file  
   -k KEY, --key KEY     encryption/decryption key  
@@ -7,4 +7,4 @@ Run textUI.py with arguments below to encrypt/decrypt the file:
   -e, --encrypt         encrypt the file  
   -d, --decrypt         decrypt the file  
   
-or run graphUI.pyw  
+or run src/graphUI.pyw  
