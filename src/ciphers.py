@@ -1,3 +1,8 @@
+'''
+Contains cipher classes and cipher_dict(str -> class) of them.
+Each cipher must contain methods "encrypt" and "decrypt".
+'''
+
 from hashlib import md5
 from math import factorial
 import random
@@ -77,5 +82,5 @@ class PermutationCipher:
         return bytes(dictionary[c] for c in data)
 
 
-cipher_class = {'caesar': CaesarCipher, 'vigenere': VigenereCipher, 'vernam': VernamCipher,
+cipher_dict = {'caesar': CaesarCipher, 'vigenere': VigenereCipher, 'vernam': VernamCipher,
                    'custom': PermutationCipher}
