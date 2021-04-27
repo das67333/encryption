@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from ciphers import cipher_dict
-from overwrite_file import overwrite_file
+from run import run
 from time import time
 
 def command_line_args():
@@ -16,6 +16,10 @@ def command_line_args():
     operation.add_argument('-d', '--decrypt', action='store_true', help='decrypt the file')
 
     args = parser.parse_args()
+    args.file_data = args.file
+    del args.file
+    args.text_key = args.key
+    del args.key
     args.key = bytes(args.key, encoding='utf-8')
     args.cipher = cipher_dict[args.cipher]
     args.encrypt = False if args.decrypt else True
@@ -25,7 +29,7 @@ def command_line_args():
 try:
     ts = time()
     args = command_line_args()
-    overwrite_file(args)
+    run(args)
     te = time()
     print('{}cryption finished'.format('En' if args.encrypt else 'De'))
     print('Time taken:', te - ts, 'sec')

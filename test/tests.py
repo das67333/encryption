@@ -2,11 +2,11 @@ import random
 import sys
 import unittest
 sys.path.append('..')
-from src import ciphers
+import src.ciphers
 
 class Tests(unittest.TestCase):
     def check_ciphers(self, data, key):
-        for cipher in ciphers.cipher_dict.values():
+        for cipher in src.ciphers.cipher_dict.values():
             new_data = cipher.decrypt(cipher.encrypt(data, key), key)
             self.assertEqual(data, new_data)
 
