@@ -5,7 +5,7 @@ from time import time
 
 def command_line_args():
     parser = ArgumentParser(description='Tutorial')
-    parser.add_argument('-f', '--file', required=True, type=str, help='path to the file')
+    parser.add_argument('-f', '--file', required=True, type=str, help='path to the data file')
     parser.add_argument('-k', '--key', required=True, type=str, help='encryption/decryption key')
 
     parser.add_argument('-c', '--cipher', required=True, type=str,
