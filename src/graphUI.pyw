@@ -16,6 +16,7 @@ class Args:
 
 def launch_window():
     window = Tk()
+    window.resizable(width=False, height=False)
     window.title(__title__)
     window.geometry('400x350')
     return window
