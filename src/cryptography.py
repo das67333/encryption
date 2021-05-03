@@ -1,6 +1,6 @@
 '''
-defines project_dir
-run(args) cipher methods with no data loss in case of exceptions
+function 'run' and class 'cryptography_ui'
+for strings/files encrypting/decrypting
 '''
 from tkinter import *
 from tkinter import filedialog, messagebox
@@ -39,7 +39,7 @@ def run(args):
             args.text_data = data
 
 
-class encrypting:
+class cryptography_ui:
     def set_entry_to_hex(self, entry, is_hex):
         # only if switched to hex
         string = bytes(entry.get(), self.encoding).hex()
@@ -237,11 +237,11 @@ class encrypting:
 
     def action_ui(self, frame):
         Button(frame, text='Encrypt', command=self.encrypt).grid(row=5,
-                                                            column=1,
-                                                            pady=10)
+                                                                 column=1,
+                                                                 pady=10)
         Button(frame, text='Decrypt', command=self.decrypt).grid(row=5,
-                                                            column=2,
-                                                            pady=10)
+                                                                 column=2,
+                                                                 pady=10)
         self.progress_label = Label(frame)
         self.progress_label.grid(row=6, column=1, columnspan=2, sticky=W)
 

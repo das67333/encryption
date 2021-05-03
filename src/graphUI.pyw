@@ -1,8 +1,7 @@
 from tkinter import *
 from tkinter.ttk import *
 from PIL import ImageTk, Image
-import encrypting, os, sys
-
+import cryptography, os, sys
 
 # str like '***/encryption/'
 project_dir = os.path.dirname(os.path.abspath(__file__))[:-3]
@@ -20,7 +19,10 @@ class App(Tk):
         def empty(*args):
             pass
 
-        tabs = {'Encrypting': encrypting.encrypting, 'e': empty}
+        tabs = {
+            'Cryptography': cryptography.cryptography_ui,
+            'Steganography ': empty
+        }
 
         self.notebook = Notebook(self, width=320, height=240, padding=10)
         for key, value in tabs.items():

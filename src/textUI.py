@@ -1,4 +1,4 @@
-import argparse, encrypting, time
+import argparse, cryptography, time
 
 
 def command_line_args():
@@ -18,7 +18,7 @@ def command_line_args():
                         '--cipher',
                         required=True,
                         type=str,
-                        choices=encrypting.ciphers.cipher_dict.keys(),
+                        choices=cryptography.ciphers.cipher_dict.keys(),
                         help='cipher type to use')
 
     operation = parser.add_mutually_exclusive_group(required=True)
@@ -46,7 +46,7 @@ def command_line_args():
 try:
     ts = time.time()
     args = command_line_args()
-    encrypting.run(args)
+    cryptography.run(args)
     te = time.time()
     print('{}cryption finished'.format('En' if args.encrypt else 'De'))
     print('Time taken:', te - ts, 'sec')
