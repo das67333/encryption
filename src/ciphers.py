@@ -9,7 +9,7 @@ import random
 
 
 def get_hash(key):
-    return int(md5(key).hexdigest(), base = 16)
+    return int(md5(key).hexdigest(), base=16)
 
 
 class CaesarCipher:
@@ -54,7 +54,8 @@ class PermutationCipher:
     def kth_permutation(n, k):
         factorials = [1]
         for i in range(n - 1):
-            factorials.append(factorials[len(factorials) - 1] * len(factorials))
+            factorials.append(factorials[len(factorials) - 1] *
+                              len(factorials))
         positions = []
         for fct in reversed(factorials):
             pos, k = divmod(k, fct)
@@ -82,5 +83,9 @@ class PermutationCipher:
         return bytes(dictionary[c] for c in data)
 
 
-cipher_dict = {'caesar': CaesarCipher, 'vigenere': VigenereCipher, 'vernam': VernamCipher,
-                   'custom': PermutationCipher}
+cipher_dict = {
+    'caesar': CaesarCipher,
+    'vigenere': VigenereCipher,
+    'vernam': VernamCipher,
+    'custom': PermutationCipher
+}

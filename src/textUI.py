@@ -1,19 +1,35 @@
-from argparse import ArgumentParser
-from ciphers import cipher_dict
-from run import run
-from time import time
+import argparse, encrypting, time
+
 
 def command_line_args():
-    parser = ArgumentParser(description='Tutorial')
-    parser.add_argument('-f', '--file', required=True, type=str, help='path to the data file')
-    parser.add_argument('-k', '--key', required=True, type=str, help='encryption/decryption key')
+    parser = argparse.ArgumentParser(description='Tutorial')
+    parser.add_argument('-f',
+                        '--file',
+                        required=True,
+                        type=str,
+                        help='path to the data file')
+    parser.add_argument('-k',
+                        '--key',
+                        required=True,
+                        type=str,
+                        help='encryption/decryption key')
 
-    parser.add_argument('-c', '--cipher', required=True, type=str,
-                        choices=cipher_dict.keys(), help='cipher type to use')
+    parser.add_argument('-c',
+                        '--cipher',
+                        required=True,
+                        type=str,
+                        choices=encrypting.ciphers.cipher_dict.keys(),
+                        help='cipher type to use')
 
     operation = parser.add_mutually_exclusive_group(required=True)
-    operation.add_argument('-e', '--encrypt', action='store_true', help='encrypt the file')
-    operation.add_argument('-d', '--decrypt', action='store_true', help='decrypt the file')
+    operation.add_argument('-e',
+                           '--encrypt',
+                           action='store_true',
+                           help='encrypt the file')
+    operation.add_argument('-d',
+                           '--decrypt',
+                           action='store_true',
+                           help='decrypt the file')
 
     args = parser.parse_args()
     args.file_data = args.file
@@ -26,11 +42,12 @@ def command_line_args():
     del args.decrypt
     return args
 
+
 try:
-    ts = time()
+    ts = time.time()
     args = command_line_args()
-    run(args)
-    te = time()
+    encrypting.run(args)
+    te = time.time()
     print('{}cryption finished'.format('En' if args.encrypt else 'De'))
     print('Time taken:', te - ts, 'sec')
 except Exception as exception:

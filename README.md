@@ -10,5 +10,6 @@ Text mode:
 
 Graphical mode:  
   Run src/graphUI.pyw  
-  Data and key can be entered or given as a file  
-  Checkbutton 'hex' converts string<->hex if possible
+  Tab 'Encrypting':  
+    Data and key can be entered or given as a file  
+    Checkbutton 'hex' converts string<->hex if possible  
