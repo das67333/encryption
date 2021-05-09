@@ -2,7 +2,6 @@
 Contains cipher classes and cipher_dict(str -> class) of them.
 Each cipher must contain methods "encrypt" and "decrypt".
 '''
-
 from hashlib import md5
 from math import factorial
 import random

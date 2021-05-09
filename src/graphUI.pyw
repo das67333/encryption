@@ -1,33 +1,33 @@
-from tkinter import *
-from tkinter.ttk import *
+import tkinter, tkinter.ttk
 from PIL import ImageTk, Image
-import cryptography, os, sys
-
-# str like '***/encryption/'
-project_dir = os.path.dirname(os.path.abspath(__file__))[:-3]
+import cryptography, steganography
+from functions import *
 
 
-class App(Tk):
+class App(tkinter.Tk):
     def __init__(self):
         super().__init__()
 
         self.title('Encryption')
         self.resizable(width=False, height=False)
-        if sys.platform == 'win32':
-            self.iconbitmap(project_dir + 'src/graphUI.ico')
+        if platform() == 'win32':
+            self.iconbitmap(project_dir() + 'icons/graphUI.ico')
 
         def empty(*args):
             pass
 
         tabs = {
             'Cryptography': cryptography.cryptography_ui,
-            'Steganography ': empty
+            'Steganography': steganography.steganography_ui
         }
 
-        self.notebook = Notebook(self, width=320, height=240, padding=10)
+        self.notebook = tkinter.ttk.Notebook(self,
+                                             width=400,
+                                             height=240,
+                                             padding=10)
         for key, value in tabs.items():
-            frame = Frame(self.notebook)
-            self.notebook.add(frame, text=key, sticky=NSEW)
+            frame = tkinter.Frame(self.notebook)
+            self.notebook.add(frame, text=key, sticky=tkinter.NSEW)
             value(frame)
         self.notebook.grid(row=0, column=0)
         self.notebook.enable_traversal()

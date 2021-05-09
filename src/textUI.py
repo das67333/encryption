@@ -38,7 +38,7 @@ def command_line_args():
     del args.key
     args.key = bytes(args.key, encoding='utf-8')
     args.cipher = cipher_dict[args.cipher]
-    args.encrypt = False if args.decrypt else True
+    args.encrypt = not bool(args.decrypt)
     del args.decrypt
     return args
 

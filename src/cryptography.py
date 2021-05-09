@@ -1,20 +1,14 @@
 '''
 function 'run' and class 'cryptography_ui'
-for strings/files encrypting/decrypting
+for encrypting strings/files
 '''
-from tkinter import *
-from tkinter import filedialog, messagebox
-from tkinter.ttk import *
-import ciphers, time
+import tkinter
+import ciphers, decorators
+
+encoding = 'utf-8'
 
 
-class Args:
-    file_data, text_data = None, None
-    file_key, text_key = None, None
-    cipher = None
-    encrypt = None
-
-
+@decorators.duration
 def run(args):
     if args.file_data:
         with open(args.file_data, 'rb') as File:
@@ -39,169 +33,126 @@ def run(args):
             args.text_data = data
 
 
-class cryptography_ui:
+class Args:
+    text_data, file_data = None, None
+    text_key, file_key = None, None
+    cipher = None
+    encrypt = None
+
+
+class text_or_file_ui:
     def set_entry_to_hex(self, entry, is_hex):
         # only if switched to hex
-        string = bytes(entry.get(), self.encoding).hex()
-        entry.delete(0, END)
+        string = bytes(entry.get(), encoding).hex()
+        entry.delete(0, tkinter.END)
         entry.insert(0, string)
 
     def set_entry_from_hex(self, entry, is_hex):
         # only if switched from hex
         string = entry.get()
-        entry.delete(0, END)
+        entry.delete(0, tkinter.END)
         try:
-            new_string = str(bytes.fromhex(string), self.encoding)
-            virtual_entry = Entry()
+            new_string = str(bytes.fromhex(string), encoding)
+            virtual_entry = tkinter.Entry()
             virtual_entry.insert(0, new_string)
             self.set_entry_to_hex(virtual_entry, is_hex)
             assert string == virtual_entry.get(), 'Unequal convertion'
             string = new_string
         except Exception as exception:
             is_hex.set(True)
-            messagebox.showerror('', exception)
+            tkinter.messagebox.showerror('', exception)
         finally:
             entry.insert(0, string)
 
-    def set_data_to_text(self):
-        self.file_data_button.grid_forget()
-        self.file_data_label.grid_forget()
-        self.file_data_label.configure(text='')
-        self.args.file_data = None
-        self.text_data_entry.grid(row=1, column=1, columnspan=3)
-        self.text_data_checkbutton.grid(row=0, column=3)
+    def set_to_text(self):
+        self.file_button.pack_forget()
+        self.file_label.pack_forget()
+        self.file_label.configure(text='')
+        self.file = None
+        self.text_checkbutton.pack(side=tkinter.LEFT, padx=(20, 5))
+        self.text_entry.pack(side=tkinter.LEFT)
 
-    def set_data_to_file(self):
-        self.text_data_entry.grid_forget()
-        self.text_data_checkbutton.grid_forget()
-        self.text_data_entry.delete(0, END)
-        self.args.text_data = None
-        self.file_data_button.grid(row=1, column=1)
-        self.file_data_label.grid(row=1, column=2)
+    def set_to_file(self):
+        self.text_entry.pack_forget()
+        self.text_checkbutton.pack_forget()
+        self.text_entry.delete(0, tkinter.END)
+        self.text = None
+        self.file_button.pack(side=tkinter.LEFT, padx=30)
+        self.file_label.pack(side=tkinter.LEFT)
 
-    def get_file_data(self):
-        self.args.file_data = filedialog.askopenfilename()
-        self.file_data_label.configure(text=self.args.file_data.split('/')[-1])
-
-    def get_text_data(self):
-        string = self.text_data_entry.get()
-        if self.text_data_hex.get():
-            self.args.text_data = bytes.fromhex(string)
+    def get_text(self):
+        string = self.text_entry.get()
+        if self.text_is_hex.get():
+            self.text = bytes.fromhex(string)
         else:
-            self.args.text_data = bytes(string, self.encoding)
+            self.text = bytes(string, encoding)
 
-    def switch_data_entry(self):
-        if self.text_data_hex.get():
-            self.set_entry_to_hex(self.text_data_entry, self.text_data_hex)
+    def get_file(self):
+        self.file = tkinter.filedialog.askopenfilename()
+        self.file_label.configure(text=self.file.split('/')[-1])
+        if not self.file:
+            self.file = None
+
+    def switch_entry(self):
+        if self.text_is_hex.get():
+            self.set_entry_to_hex(self.text_entry, self.text_is_hex)
         else:
-            self.set_entry_from_hex(self.text_data_entry, self.text_data_hex)
+            self.set_entry_from_hex(self.text_entry, self.text_is_hex)
 
-    def data_ui(self, frame):
-        Label(frame, text='Data: ').grid(row=0,
-                                         column=0,
-                                         sticky=W,
-                                         padx=20,
-                                         pady=10)
-        self.data_type = IntVar()
-        self.text_data_entry = Entry(frame, width=30)
-        self.text_data_hex = BooleanVar()
-        self.text_data_checkbutton = Checkbutton(
-            frame,
-            text='hex',
-            command=self.switch_data_entry,
-            variable=self.text_data_hex)
-        self.file_data_button = Button(frame,
-                                       text='Open',
-                                       command=self.get_file_data)
-        self.file_data_label = Label(frame)
-        Radiobutton(frame,
-                    text='Text',
-                    command=self.set_data_to_text,
-                    variable=self.data_type,
-                    value=1).grid(row=0, column=1)
-        Radiobutton(frame,
-                    text='File',
-                    command=self.set_data_to_file,
-                    variable=self.data_type,
-                    value=2).grid(row=0, column=2)
+    def __init__(self, master_frame, label_text):
+        frame_top = tkinter.Frame(master_frame)
+        frame_bottom = tkinter.Frame(master_frame)
+        self.text, self.file = None, None
+        tkinter.Label(frame_top, text=label_text, width=5,
+                      anchor=tkinter.W).pack(side=tkinter.LEFT,
+                                             padx=10,
+                                             pady=10)
+        self.type = tkinter.IntVar()
+        self.text_entry = tkinter.Entry(frame_bottom, width=50)
+        self.text_is_hex = tkinter.BooleanVar()
+        self.text_checkbutton = tkinter.Checkbutton(frame_bottom,
+                                                    text='hex',
+                                                    command=self.switch_entry,
+                                                    variable=self.text_is_hex)
+        self.file_button = tkinter.Button(frame_bottom,
+                                          text='Open',
+                                          command=self.get_file)
+        self.file_label = tkinter.Label(frame_bottom)
+        tkinter.Radiobutton(frame_top,
+                            text='Text',
+                            command=self.set_to_text,
+                            variable=self.type,
+                            value=1).pack(side=tkinter.LEFT, padx=(0, 5))
+        tkinter.Radiobutton(frame_top,
+                            text='File',
+                            command=self.set_to_file,
+                            variable=self.type,
+                            value=2).pack(side=tkinter.LEFT, padx=(0, 5))
+        frame_top.pack(anchor=tkinter.W)
+        frame_bottom.pack(anchor=tkinter.W)
 
-    def set_key_to_text(self):
-        self.file_key_button.grid_forget()
-        self.file_key_label.grid_forget()
-        self.file_key_label.configure(text='')
-        self.args.file_key = None
-        self.text_key_entry.grid(row=3, column=1, columnspan=3)
-        self.text_key_checkbutton.grid(row=2, column=3)
+    def get(self):
+        if self.type.get() == 1:
+            self.get_text()
+        return self.text, self.file
 
-    def set_key_to_file(self):
-        self.text_key_entry.grid_forget()
-        self.text_key_checkbutton.grid_forget()
-        self.text_key_entry.delete(0, END)
-        self.args.text_key = None
-        self.file_key_button.grid(row=3, column=1)
-        self.file_key_label.grid(row=3, column=2)
 
-    def get_file_key(self):
-        self.args.file_key = filedialog.askopenfilename()
-        self.file_key_label.configure(text=self.args.file_key.split('/')[-1])
-
-    def get_text_key(self):
-        string = self.text_key_entry.get()
-        if self.text_key_hex.get():
-            self.args.text_key = bytes.fromhex(string)
-        else:
-            self.args.text_key = bytes(string, self.encoding)
-
-    def switch_key_entry(self):
-        if self.text_key_hex.get():
-            self.set_entry_to_hex(self.text_key_entry, self.text_key_hex)
-        else:
-            self.set_entry_from_hex(self.text_key_entry, self.text_key_hex)
-
-    def key_ui(self, frame):
-        Label(frame, text='Key: ').grid(row=2,
-                                        column=0,
-                                        sticky=W,
-                                        padx=20,
-                                        pady=10)
-        self.key_type = IntVar()
-        self.text_key_entry = Entry(frame, width=30)
-        self.text_key_hex = BooleanVar()
-        self.text_key_checkbutton = Checkbutton(frame,
-                                                text='hex',
-                                                command=self.switch_key_entry,
-                                                variable=self.text_key_hex)
-        self.file_key_button = Button(frame,
-                                      text='Open',
-                                      command=self.get_file_key)
-        self.file_key_label = Label(frame)
-        Radiobutton(frame,
-                    text='Text',
-                    command=self.set_key_to_text,
-                    variable=self.key_type,
-                    value=1).grid(row=2, column=1)
-        Radiobutton(frame,
-                    text='File',
-                    command=self.set_key_to_file,
-                    variable=self.key_type,
-                    value=2).grid(row=2, column=2)
-
-    def cipher_ui(self, frame):
-        Label(frame, text='Cipher: ').grid(row=4,
-                                           column=0,
-                                           sticky=W,
-                                           padx=20,
-                                           pady=10)
-        self.combo = Combobox(frame)
+class cryptography_ui:
+    def cipher_ui(self, master_frame):
+        frame = tkinter.Frame(master_frame)
+        tkinter.Label(frame, text='Cipher', width=5,
+                      anchor=tkinter.W).pack(side=tkinter.LEFT,
+                                             padx=10,
+                                             pady=10)
+        self.combo = tkinter.ttk.Combobox(frame, width=12)
         self.combo['values'] = tuple(ciphers.cipher_dict.keys())
         self.combo.current(0)
-        self.combo.grid(row=4, column=1, columnspan=2)
+        self.combo.pack(side=tkinter.LEFT)
+        frame.pack(anchor=tkinter.W)
 
     def check_args(self):
-        if self.data_type.get() == 1:
-            self.get_text_data()
-        if self.key_type.get() == 1:
-            self.get_text_key()
+        self.args.text_data, self.args.file_data = self.data_ui.get()
+        self.args.text_key, self.args.file_key = self.key_ui.get()
         self.args.cipher = ciphers.cipher_dict[self.combo.get()]
         if self.args.file_data == None and self.args.text_data == None:
             raise TypeError('Data are not selected')
@@ -209,23 +160,19 @@ class cryptography_ui:
             raise TypeError('Key is not selected')
 
     def check_data_entry(self):
-        if self.data_type.get() == 1:
-            self.text_data_entry.delete(0, END)
-            if not self.text_data_hex.get():
-                self.text_data_hex.set(True)
-            self.text_data_entry.insert(0, self.args.text_data.hex())
+        if self.data_ui.type.get() == 1:
+            self.data_ui.text_entry.delete(0, tkinter.END)
+            if not self.data_ui.text_is_hex.get():
+                self.data_ui.text_is_hex.set(True)
+            self.data_ui.text_entry.insert(0, self.args.text_data.hex())
 
+    @decorators.messagebox
     def launch(self):
-        try:
-            self.check_args()
-            ts = time.time()
-            run(self.args)
-            te = time.time()
-            self.progress_label.configure(text='Time taken: ' +
-                                          f'{(te - ts):.3f}' + ' sec')
-            self.check_data_entry()
-        except Exception as exception:
-            messagebox.showerror('', exception)
+        self.check_args()
+        duration = run(self.args)
+        self.progress_label.configure(text='Time taken: ' + f'{duration:.3f}' +
+                                      ' sec')
+        self.check_data_entry()
 
     def encrypt(self):
         self.args.encrypt = True
@@ -235,21 +182,24 @@ class cryptography_ui:
         self.args.encrypt = False
         self.launch()
 
-    def action_ui(self, frame):
-        Button(frame, text='Encrypt', command=self.encrypt).grid(row=5,
-                                                                 column=1,
-                                                                 pady=10)
-        Button(frame, text='Decrypt', command=self.decrypt).grid(row=5,
-                                                                 column=2,
-                                                                 pady=10)
-        self.progress_label = Label(frame)
-        self.progress_label.grid(row=6, column=1, columnspan=2, sticky=W)
+    def action_ui(self, master_frame):
+        frame_top = tkinter.Frame(master_frame)
+        frame_bottom = tkinter.Frame(master_frame)
+        tkinter.Button(frame_top, text='Encrypt',
+                       command=self.encrypt).pack(side=tkinter.LEFT,
+                                                  padx=(50, 10),
+                                                  pady=10)
+        tkinter.Button(frame_top, text='Decrypt',
+                       command=self.decrypt).pack(side=tkinter.LEFT)
+        self.progress_label = tkinter.Label(frame_bottom)
+        self.progress_label.pack(side=tkinter.LEFT)
+        frame_top.pack(anchor=tkinter.W)
+        frame_bottom.pack(anchor=tkinter.W)
 
-    def __init__(self, frame):
-        self.encoding = 'utf-8'
+    def __init__(self, master_frame):
         self.args = Args()
 
-        self.data_ui(frame)
-        self.key_ui(frame)
-        self.cipher_ui(frame)
-        self.action_ui(frame)
+        self.data_ui = text_or_file_ui(master_frame, 'Data')
+        self.key_ui = text_or_file_ui(master_frame, 'Key')
+        self.cipher_ui(master_frame)
+        self.action_ui(master_frame)

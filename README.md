@@ -15,3 +15,5 @@ Graphical mode:
     Checkbutton 'hex' converts string<->hex if possible  
     
   Tab 'Steganography':  
+    Entry 'Message' is used to enter and to reveal message
+    Edited image always has a 'bmp' extension
