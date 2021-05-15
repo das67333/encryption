@@ -1,5 +1,4 @@
 import tkinter, tkinter.ttk
-from PIL import ImageTk, Image
 import cryptography, steganography
 from functions import *
 
@@ -12,9 +11,6 @@ class App(tkinter.Tk):
         self.resizable(width=False, height=False)
         if platform() == 'win32':
             self.iconbitmap(project_dir() + 'icons/graphUI.ico')
-
-        def empty(*args):
-            pass
 
         tabs = {
             'Cryptography': cryptography.cryptography_ui,
