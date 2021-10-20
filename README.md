@@ -1,4 +1,4 @@
-Before launch:
+Before launch:  
   pip install requests, tk, pillow  
 
 Text mode:  
