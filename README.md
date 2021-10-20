@@ -1,3 +1,5 @@
+Tested on Windows  
+
 Before launch:  
   pip install requests, tk, pillow  
 
