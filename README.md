@@ -1,3 +1,6 @@
+Before launch:
+  pip install requests, tk, pillow  
+
 Text mode:  
   Run src/textUI.py with arguments below to encrypt/decrypt the file:  
   -h, --help            show this help message and exit  
