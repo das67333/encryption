@@ -22,4 +22,4 @@ Graphical mode:
   Tab 'Steganography':  
     Entry 'Message' is used to enter and to reveal message  
     Original image can be obtained from a link or as a file  
-    Edited image always has a 'bmp' extension  
+    Edited image always has 'bmp' extension  
